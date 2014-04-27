@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WriteTXTFile {
 
@@ -37,7 +38,7 @@ public class WriteTXTFile {
     return returnValue;
   }
 
-  public void writeTextFile(String fileName, /*String*/ ArrayList<String> s)
+  public void writeTextFile(String fileName, /*String*/ HashMap<String, ArrayList<String>> mapOfValues)
   {
     FileWriter output = null;
     try 
@@ -45,9 +46,16 @@ public class WriteTXTFile {
       output = new FileWriter(fileName);
       BufferedWriter writer = new BufferedWriter(output);
       String sWholeString = "";
-      for(int i=0; i<s.size(); i++)
+      
+      
+      for(int i=0; i<mapOfValues.get("Nazwy").size(); i++) //petla wykonuje sie w zaleznosci od dlugosci ArrayListy 'Nazwy'
       {
-    	String currentString = s.get(i);  
+    	String sCurrentCompany = mapOfValues.get("Nazwy").get(i);
+    	String sCurrentcity = mapOfValues.get("Miasta").get(i);
+    	String sCurrentStreet = mapOfValues.get("Ulice").get(i);
+    	String sCurrentNip = mapOfValues.get("Nipy").get(i);
+    	
+    	String currentString = sCurrentCompany + " ; " + sCurrentNip + " ; " + sCurrentcity + " ; " + sCurrentStreet;
     	writer.write(currentString); 
         writer.newLine();
         

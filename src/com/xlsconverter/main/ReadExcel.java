@@ -3,6 +3,7 @@ package com.xlsconverter.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -11,6 +12,8 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 public class ReadExcel {
+	
+	
 
   private String inputFile;
 
@@ -24,8 +27,18 @@ public class ReadExcel {
     File inputWorkbook = new File(inputFile);
     Workbook w;
     //-----------------------------------------
-    String sCurrentCompanyName = "";  
+    String sCurrentCompanyName = "";
+    String sCurrentCity = "";
+    String sCurrentStreet="";
+    String sCurrentNip="";
+    boolean nipFieldEmpty=false;
+    HashMap<String, ArrayList<String>> mapOfValues = new HashMap<String,ArrayList<String>>(); //mapa zawieraj¹ce arrayListy bêd¹ce odwzorowaniem kolumn z danymi (dostawcy, nipy itd)
+    
     ArrayList<String> sCompanyList = new ArrayList<String>();
+    ArrayList<String> sNipList = new ArrayList<String>();
+    ArrayList<String> sPostalCodeList = new ArrayList<String>();
+    ArrayList<String> sStreetList = new ArrayList<String>();
+    ArrayList<String> sCityList =  new ArrayList<String>();
     
     WriteTXTFile myFile = new WriteTXTFile();
     
@@ -47,11 +60,48 @@ public class ReadExcel {
     		  System.out.println(sCurrentCompanyName);
     		  sCompanyList.add(sCurrentCompanyName);
     	  }
+    	  if(sRow.equals("Miasto"))
+    	  {
+    		  sCurrentCity = sheet.getCell(4,i).getContents().toString();
+    		  System.out.println(sCurrentCity);
+    		  sCityList.add(sCurrentCity);
+    	  }
+    	  if(sRow.equals("Ulica"))
+    	  {
+    		  sCurrentStreet = sheet.getCell(4,i).getContents().toString();
+    		  System.out.println(sCurrentStreet);
+    		  sStreetList.add(sCurrentStreet);
+    	  }
+    	  if(sRow.equals("Nr pod. 1"))
+    	  {
+    		  sCurrentNip= sheet.getCell(4,i).getContents().toString();
+    		  System.out.println(sCurrentNip);
+    		  if(sCurrentNip.equals("")==true)
+    		  {
+    			  nipFieldEmpty=true;
+    		  }
+    		  
+    		  sNipList.add(sCurrentStreet);
+    	  }
+    	  if(sRow.equals("Informacja") && nipFieldEmpty==true)
+    	  {
+    		  sCurrentNip= sheet.getCell(4,i).getContents().toString();
+    		  System.out.println(sCurrentNip);
+    		  sNipList.add(sCurrentNip);
+    		
+    	  }
+    	  
+    	  
+    	  mapOfValues.put("Nipy", sNipList);
+    	  mapOfValues.put("Nazwy", sCompanyList);
+    	  mapOfValues.put("Miasta", sCityList);
+    	  mapOfValues.put("Ulice", sStreetList);
+    	  
       }
       
       String input = myFile.readTextFile("C:/Users/Marcin/Desktop/Magna Dostawcy/Testing.txt");
       System.out.println(input);
-      myFile.writeTextFile("C:/Users/Marcin/Desktop/Magna Dostawcy/Testing2.txt", sCompanyList);
+      myFile.writeTextFile("C:/Users/Marcin/Desktop/Magna Dostawcy/Testing2.txt", /*sCompanyList*/ mapOfValues);
       
       /*
        Petla pobierajaca odpowiednie dane z sekcji z dostawca
@@ -82,8 +132,12 @@ public class ReadExcel {
 	
 	        }
       }*/
-    } catch (BiffException e) {
+    } catch (BiffException e)
+    {
+    	
       e.printStackTrace();
+      System.out.println(e.getMessage());
+      
     }
   }
 
