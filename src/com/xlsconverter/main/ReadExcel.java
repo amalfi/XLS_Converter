@@ -90,14 +90,15 @@ public class ReadExcel {
     		  sNipList.add(sCurrentNip);
     		
     	  }
-    	  
-    	  
-    	  mapOfValues.put("Nipy", sNipList);
-    	  mapOfValues.put("Nazwy", sCompanyList);
-    	  mapOfValues.put("Miasta", sCityList);
-    	  mapOfValues.put("Ulice", sStreetList);
-    	  
+    	
       }
+      
+      
+      
+	  mapOfValues.put("Nipy", sNipList);
+	  mapOfValues.put("Nazwy", sCompanyList);
+	  mapOfValues.put("Miasta", sCityList);
+	  mapOfValues.put("Ulice", sStreetList);
       
       String input = myFile.readTextFile("C:/Users/Marcin/Desktop/Magna Dostawcy/Testing.txt");
       System.out.println(input);
